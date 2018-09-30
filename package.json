@@ -1,0 +1,17 @@
+{
+  "name": "johnny5",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/johnny-five": "^0.0.36",
+    "@types/mustache": "^0.8.31",
+    "@types/socket.io": "^1.4.36",
+    "dicer": "^0.2.5",
+    "johnny-five": "^0.15.0",
+    "mustache": "^2.3.0",
+    "raspi-io": "^9.0.0",
+    "socket.io": "^2.1.1",
+    "typescript": "^2.9.2"
+  }
+}

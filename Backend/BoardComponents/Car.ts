@@ -5,17 +5,18 @@ import { applyMixins } from "../../helpers";
 
 export class Car implements PubSub
 {
-	private board: Board;
-	private motors: Motors;
-	private frontWheelServo: Servo;
-	private speed: number = 0;
 	private factory: Factory;
+	private board: Board;
+	private motors: Motors | undefined;
+	private frontWheelServo: Servo | undefined;
+	private panServo: Servo | undefined;
+	private tiltServo: Servo | undefined;
+	private speed: number = 40;
 
 	public constructor (factory: Factory)
 	{
 		this.factory = factory;
 		this.board = this.factory.createRaspiBoard();
-		this.frontWheelServo = this.factory.createFrontWheelsServo();
 	}
 
 	public start ()
@@ -24,55 +25,116 @@ export class Car implements PubSub
 			console.log('Board Ready');
 
 			this.motors = this.factory.createMotors();
+			this.frontWheelServo = this.factory.createFrontWheelsServo();
+			this.panServo = this.factory.createPanServo();
+			this.tiltServo = this.factory.createTiltServo();
 
 			this.publish('car:ready');
 
 			this.board.on('exit', () => {
-				this.motors.stop();
+				this.stop();
 				this.publish('car:stop');
 			});
 
 			this.board.repl.inject({
-				sweep: () => {
-					this.frontWheelServo.sweep();
-				},
-				move: (pos: number) => {
-					this.frontWheelServo.to(pos);
-				},
-				stop: () => {
-					this.frontWheelServo.stop();
-				}
+				motors: this.motors,
+				frontServo: this.frontWheelServo,
+				pan: this.panServo,
+				tilt: this.tiltServo
 			});
 		});
 	}
 
 	public goForward ()
 	{
-		this.motors.forward(this.speed);
+		this.motors.reverse(this.speed);
+		console.log(`go reverse at ${this.speed}`);
 	}
 
 	public goReverse ()
 	{
-		this.motors.reverse(this.speed);
-	}
-
-	public speedUp ()
-	{
-		if (this.speed <= 220) {
-			this.speed += 20;
-		}
-	}
-
-	public speedDown ()
-	{
-		if (this.speed >= 20) {
-			this.speed -= 20;
-		}
+		this.motors.forward(this.speed);
+		console.log(`go forward at ${this.speed}`);
 	}
 
 	public stop ()
 	{
 		this.motors.stop();
+		// console.log(`stop at ${this.speed}`);
+	}
+
+	public speedUp ()
+	{
+		if (this.speed < 240) {
+			this.speed += 1;
+		}
+		console.log(`speed up to ${this.speed}`);
+	}
+
+	public speedDown ()
+	{
+		if (this.speed > 40) {
+			this.speed -= 1;
+		}
+		console.log(`speed down to ${this.speed}`);
+	}
+
+	public turnLeft ()
+	{
+		this.frontWheelServo.min();
+		console.log('turn left');
+	}
+
+	public turnRight ()
+	{
+		this.frontWheelServo.max();
+		console.log('turn right');
+	}
+
+	public turnForward ()
+	{
+		this.frontWheelServo.center();
+		// console.log('turn forward');
+	}
+
+	public panLeft ()
+	{
+		if (this.panServo.position < this.panServo.range[1]) {
+			this.panServo.to(this.panServo.position + 5);
+			console.log('pan left');
+		} else {
+			console.log('max pan left reached');
+		}
+	}
+
+	public panRight ()
+	{
+		if (this.panServo.position > this.panServo.range[0]) {
+			this.panServo.to(this.panServo.position - 5);
+			console.log('pan right');
+		} else {
+			console.log('max pan right reached');
+		}
+	}
+
+	public tiltDown ()
+	{
+		if (this.tiltServo.position > this.tiltServo.range[0]) {
+			this.tiltServo.to(this.tiltServo.position - 5);
+			console.log('tilt down');
+		} else {
+			console.log('max tilt down reached');
+		}
+	}
+
+	public tiltUp ()
+	{
+		if (this.tiltServo.position < this.tiltServo.range[1]) {
+			this.tiltServo.to(this.tiltServo.position + 5);
+			console.log('tilt up');
+		} else {
+			console.log('max tilt up reached');
+		}
 	}
 
 	public getUId(): string {}

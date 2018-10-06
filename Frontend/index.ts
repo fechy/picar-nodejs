@@ -14,6 +14,8 @@ window.addEventListener('gamepadconnected', (event) => {
 // Y -> buttons[4]
 // LT -> buttons[6]
 // RT -> buttons[7]
+// Start -> buttons[11]
+// Select -> buttons[10]
 window.requestAnimationFrame(() => foo());
 
 function foo ()
@@ -35,6 +37,8 @@ function foo ()
 			y: gp.buttons[4].pressed,
 			lt: gp.buttons[6].pressed,
 			rt: gp.buttons[7].pressed,
+			start: gp.buttons[11].pressed,
+			select: gp.buttons[10].pressed
 		};
 
 		// Send buttons state via socket

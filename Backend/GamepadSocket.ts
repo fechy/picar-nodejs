@@ -12,18 +12,53 @@ export class GamepadSocket
 
 			socket.on('buttons:state', (buttonsState) => {
 
-				car.goForward();
-				/*if (buttonsState.up) {
+				if (buttonsState.up) {
 					car.goForward();
-				} else if (buttonsState.down) {
+				}
+
+				if (buttonsState.down) {
 					car.goReverse();
-				} else if (buttonsState.rt) {
+				}
+
+				if (buttonsState.rt) {
 					car.speedUp();
-				} else if (buttonsState.lt) {
+				}
+
+				if (buttonsState.lt) {
 					car.speedDown();
-				} else if (buttonsState.yCenter) {
+				}
+
+				if (buttonsState.left) {
+					car.turnLeft();
+				}
+
+				if (buttonsState.right) {
+					car.turnRight();
+				}
+
+				if (buttonsState.a){
+					car.panRight();
+				}
+
+				if (buttonsState.b){
+					car.tiltDown();
+				}
+
+				if (buttonsState.x){
+					car.tiltUp();
+				}
+
+				if (buttonsState.y){
+					car.panLeft();
+				}
+
+				if (buttonsState.yCenter) {
 					car.stop();
-				}*/
+				}
+
+				if (buttonsState.xCenter) {
+					car.turnForward();
+				}
 
 			});
 		});

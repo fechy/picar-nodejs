@@ -1,4 +1,4 @@
-import { Board, Motors, Proximity, Servo } from "johnny-five";
+import { Board, Motors, Proximity, Servo } from 'johnny-five';
 import * as Raspi from 'raspi-io';
 import { Car } from "./Car";
 
@@ -19,7 +19,9 @@ export class Factory
 	{
 		return new Servo({
 			pin: 0,
-			controller: 'PCA9685'
+			controller: 'PCA9685',
+			range: [ 50, 75 ],
+			startAt: 62.5
 		});
 	}
 
@@ -27,7 +29,9 @@ export class Factory
 	{
 		return new Servo({
 			pin: 1,
-			controller: 'PCA9685'
+			controller: 'PCA9685',
+			range: [ 35, 70 ],
+			startAt: 52.5
 		});
 	}
 
@@ -35,15 +39,17 @@ export class Factory
 	{
 		return new Servo({
 			pin: 2,
-			controller: 'PCA9685'
+			controller: 'PCA9685',
+			range: [ 42, 75 ],
+			startAt: 58.5
 		});
 	}
 
 	public createMotors ()
 	{
 		return new Motors([
-			{ pins: { pwm: 26, dir: 0 } },
-			{ pins: { pwm: 23, dir: 2 } }
+			{ controller: "PCA9685", pins: { pwm: 4, dir: 6 }},
+			{ controller: "PCA9685", pins: { pwm: 5, dir: 7 }}
 		]);
 	}
 

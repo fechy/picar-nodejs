@@ -97,7 +97,4 @@ const test = new Test(
 	boardComponentsFactory,
 	controlPanelOptions);
 
-// test.start();
-
-const car = boardComponentsFactory.createCar();
-car.start();
+test.start();

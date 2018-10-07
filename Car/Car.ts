@@ -63,19 +63,16 @@ export class Car extends CustomEventTarget
 	public goForward ()
 	{
 		this.motors.reverse(this.speed);
-		console.log(`go reverse at ${this.speed}`);
 	}
 
 	public goReverse ()
 	{
 		this.motors.forward(this.speed);
-		console.log(`go forward at ${this.speed}`);
 	}
 
 	public stop ()
 	{
 		this.motors.stop();
-		// console.log(`stop at ${this.speed}`);
 	}
 
 	public speedUp ()
@@ -83,7 +80,6 @@ export class Car extends CustomEventTarget
 		if (this.speed < 240) {
 			this.speed += 1;
 		}
-		console.log(`speed up to ${this.speed}`);
 	}
 
 	public speedDown ()
@@ -91,14 +87,12 @@ export class Car extends CustomEventTarget
 		if (this.speed > 40) {
 			this.speed -= 1;
 		}
-		console.log(`speed down to ${this.speed}`);
 	}
 
 	public turnLeft ()
 	{
 		if (this.frontWheelServo) {
 			this.frontWheelServo.min();
-			console.log('turn left');
 		}
 	}
 
@@ -106,7 +100,6 @@ export class Car extends CustomEventTarget
 	{
 		if (this.frontWheelServo) {
 			this.frontWheelServo.max();
-			console.log('turn right');
 		}
 	}
 
@@ -114,7 +107,6 @@ export class Car extends CustomEventTarget
 	{
 		if (this.frontWheelServo) {
 			this.frontWheelServo.center();
-			// console.log('turn forward');
 		}
 	}
 
@@ -122,10 +114,7 @@ export class Car extends CustomEventTarget
 	{
 		if (this.panServo) {
 			if (this.panServo.position < this.panServo.range[1]) {
-				this.panServo.to(this.panServo.position + 5);
-				console.log('pan left');
-			} else {
-				console.log('max pan left reached');
+				this.panServo.to(this.panServo.position + 1);
 			}
 		}
 	}
@@ -134,10 +123,7 @@ export class Car extends CustomEventTarget
 	{
 		if (this.panServo) {
 			if (this.panServo.position > this.panServo.range[0]) {
-				this.panServo.to(this.panServo.position - 5);
-				console.log('pan right');
-			} else {
-				console.log('max pan right reached');
+				this.panServo.to(this.panServo.position - 1);
 			}
 		}
 	}
@@ -146,10 +132,7 @@ export class Car extends CustomEventTarget
 	{
 		if (this.tiltServo) {
 			if (this.tiltServo.position > this.tiltServo.range[0]) {
-				this.tiltServo.to(this.tiltServo.position - 5);
-				console.log('tilt down');
-			} else {
-				console.log('max tilt down reached');
+				this.tiltServo.to(this.tiltServo.position - 1);
 			}
 		}
 	}
@@ -158,11 +141,16 @@ export class Car extends CustomEventTarget
 	{
 		if (this.tiltServo) {
 			if (this.tiltServo.position < this.tiltServo.range[1]) {
-				this.tiltServo.to(this.tiltServo.position + 5);
-				console.log('tilt up');
-			} else {
-				console.log('max tilt up reached');
+				this.tiltServo.to(this.tiltServo.position + 1);
 			}
+		}
+	}
+
+	public centerPanTil ()
+	{
+		if (this.tiltServo && this.panServo) {
+			this.tiltServo.center();
+			this.panServo.center();
 		}
 	}
 }

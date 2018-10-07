@@ -52,6 +52,10 @@ export class GamepadSocket
 					car.panLeft();
 				}
 
+				if (buttonsState.start) {
+					car.centerPanTil();
+				}
+
 				if (buttonsState.yCenter) {
 					car.stop();
 				}

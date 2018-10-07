@@ -1,12 +1,12 @@
-import * as FS from "fs";
-import * as Path from "path";
-import * as OS from "os";
+import * as FS from 'fs';
+import * as Path from 'path';
+import * as OS from 'os';
 
 const GST_LAUNCH_EXECUTABLE = 'gst-launch-1.0';
 
 export function getPath (): string
 {
-	if (OS.platform() === "win32") {
+	if (OS.platform() === 'win32') {
 
 		return getWindowsBin();
 

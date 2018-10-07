@@ -3,14 +3,14 @@ import * as Http from 'http';
 import * as SocketIO from 'socket.io';
 import * as Dicer from 'dicer';
 
-export class SocketWebCamWrapper {
+export class WebcamSocket {
 
 	public wrap (
 		gStreamTcpAddress: string,
 		gStreamTcpPort: number,
 		broadcastTcpAddress: string,
 		broadcastTcpPort: number
-	) {
+	): void {
 		const socket = new Net.Socket();
 
 		socket.connect(gStreamTcpPort, gStreamTcpAddress, () => {

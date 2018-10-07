@@ -1,5 +1,4 @@
 import * as ChildProcess from 'child_process';
-
 import * as GStreamOSBin from './GStreamOSBin';
 
 // const SpawnSync = ChildProcess.spawnSync;

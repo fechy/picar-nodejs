@@ -3,6 +3,6 @@
 
 ### Start
 
-With video: `sudo node index.js`
+With video: `sudo node index.ts`
 
 Without video: `sudo node test.js`

@@ -1,10 +1,10 @@
-import * as SocketIO from "socket.io";
-import * as Http from "http";
-import { Car } from "./BoardComponents/Car";
+import * as SocketIO from 'socket.io';
+import * as Http from 'http';
+import { Car } from '../Car';
 
 export class GamepadSocket
 {
-	public listen (server: Http.Server, car: Car)
+	public listen (server: Http.Server, car: Car): void
 	{
 		const io = SocketIO.listen(server);
 

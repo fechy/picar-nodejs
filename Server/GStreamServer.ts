@@ -1,14 +1,14 @@
 import * as OS from 'os';
 
-import { GStream } from "./GStream";
-import { GStreamServerOptions } from "./GStreamServerOptions";
+import { GStream } from '../Webcam';
+import { IGStreamServerOptions } from './IGStreamServerOptions';
 
 export class GStreamServer
 {
-	private config: GStreamServerOptions;
+	private config: IGStreamServerOptions;
 	private readonly videoSrc: string;
 
-	public constructor(config: GStreamServerOptions) {
+	public constructor(config: IGStreamServerOptions) {
 
 		this.config = config;
 

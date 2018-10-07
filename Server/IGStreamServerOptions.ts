@@ -1,4 +1,4 @@
-export interface GStreamServerOptions
+export interface IGStreamServerOptions
 {
 	deviceIndex: number;
 	fake: boolean;

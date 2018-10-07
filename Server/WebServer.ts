@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as url from 'url';
 import * as Mustache from 'mustache';
 
-const map = {
+const map: any = {
 	'.ico': 'image/x-icon',
 	'.html': 'text/html',
 	'.js': 'text/javascript',
@@ -23,14 +23,14 @@ export class WebServer
 {
 	private server: Http.Server | undefined;
 
-	public serve (uiAddress: string, uiPort: number, webcamAddress: string, webcamPort: number)
+	public serve (uiAddress: string, uiPort: number, webcamAddress: string, webcamPort: number): Http.Server
 	{
 		this.close();
 
 		this.server = Http.createServer((request, response) => {
 
 			if (request.url === undefined) {
-				this.loadIndex(webcamAddress, webcamPort, response);
+				this.loadIndex(uiAddress, uiPort, webcamAddress, webcamPort, response);
 				return;
 			}
 
@@ -39,23 +39,25 @@ export class WebServer
 			const ext = path.parse(pathname).ext;
 
 			if (request.url === '/') {
-				this.loadIndex(webcamAddress, webcamPort, response);
+				this.loadIndex(uiAddress, uiPort, webcamAddress, webcamPort, response);
 			} else {
 				fs.readFile(`./Frontend${request.url}`, (err, data) => {
 					if(err){
 						response.statusCode = 500;
 						response.end(`Error getting the file: ${err}.`);
 					} else {
-						// if the file is found, set Content-type and send data
 						response.setHeader('Content-type', map[ext] || 'text/plain' );
 						response.end(data);
 					}
 				});
 			}
 		});
+
 		this.server.listen(uiPort, uiAddress);
 
 		console.log('Open http://' + uiAddress + ':' + uiPort + '/ in your browser!');
+
+		return this.server;
 	}
 
 	public close ()
@@ -66,23 +68,24 @@ export class WebServer
 		}
 	}
 
-	public getServer (): Http.Server
+	private loadIndex (
+		uiAddress: string,
+		uiPort: number,
+		webcamAddress: string,
+		webcamPort: number,
+		response: Http.ServerResponse): void
 	{
-		return this.server;
-	}
-
-	private loadIndex (webcamAddress: string, webcamPort: number, response: Http.ServerResponse): void
-	{
-		fs.readFile('./Frontend/index.html',"utf8", (err, html) => {
+		fs.readFile('./index.html','utf8', (err, html) => {
 			response.writeHead(200, {
-				"Content-Type": "text/html"
+				'Content-Type': 'text/html'
 			});
 			response.write(
 				Mustache.render(html, {
-						webcamAddress: webcamAddress,
-						webcamPort: webcamPort
-					}
-				)
+					webcamAddress: webcamAddress,
+					webcamPort: webcamPort,
+					uiAddress: uiAddress,
+					uiPort: uiPort
+				})
 			);
 			response.end();
 		});

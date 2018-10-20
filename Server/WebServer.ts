@@ -41,7 +41,7 @@ export class WebServer
 			if (request.url === '/') {
 				this.loadIndex(uiAddress, uiPort, webcamAddress, webcamPort, response);
 			} else {
-				fs.readFile(`./Frontend${request.url}`, (err, data) => {
+				fs.readFile(`./${request.url}`, (err, data) => {
 					if(err){
 						response.statusCode = 500;
 						response.end(`Error getting the file: ${err}.`);

@@ -82,7 +82,10 @@ export class ControlPanel
 
 		car.on('car:ready', () => this.gamepadSocket.listen(server, car));
 
-		car.on('car:stop', () => this.webServer.close());
+		car.on('car:stop', () => {
+			gStreamCamProcess.kill();
+			this.webServer.close()
+		});
 
 		car.start();
 	}

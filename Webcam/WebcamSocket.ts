@@ -37,12 +37,16 @@ export class WebcamSocket {
 				});
 			});
 
+			dicer.on('error', (e: Error) => {
+				console.log(`Dicer error: ${broadcastTcpAddress}:${broadcastTcpPort}\n`, e);
+			});
+
 			dicer.on('finish', () => {
-				console.log('Dicer finished: ' + broadcastTcpAddress + ':' + broadcastTcpPort);
+				console.log(`Dicer finished: ${broadcastTcpAddress}:${broadcastTcpPort}`);
 			});
 
 			socket.on('close', () => {
-				console.log('Socket closed: ' + broadcastTcpAddress + ':' + broadcastTcpPort);
+				console.log(`Socket closed: ${broadcastTcpAddress}:${broadcastTcpPort}`);
 			});
 
 			socket.pipe(dicer);

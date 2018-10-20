@@ -1,7 +1,8 @@
 import * as Net from 'net';
 import * as Http from 'http';
 import * as SocketIO from 'socket.io';
-import * as Dicer from 'dicer';
+
+const Dicer = require('dicer');
 
 export class WebcamSocket {
 

@@ -1,9 +1,9 @@
 import { Board, Motors, Servo } from 'johnny-five';
+import { EventEmitter } from 'events';
 
 import { CarFactory } from './CarFactory';
-import { CustomEventTarget } from '../Helpers';
 
-export class Car extends CustomEventTarget
+export class Car extends EventEmitter
 {
 	private factory: CarFactory;
 	private board: Board;
@@ -29,14 +29,14 @@ export class Car extends CustomEventTarget
 			this.startComponents();
 			this.startRepl();
 
-			this.dispatchEvent(new Event('car:ready'));
+			this.emit('car:ready');
 			console.log('car:ready');
 		});
 
 		this.board.on('exit', () => {
 			this.stop();
 			this.turnForward();
-			this.dispatchEvent(new Event('car:stop'));
+			this.emit('car:stop');
 			console.log('car:stop');
 		});
 	}
@@ -62,17 +62,23 @@ export class Car extends CustomEventTarget
 
 	public goForward ()
 	{
-		this.motors.reverse(this.speed);
+		if (this.motors){
+			this.motors.reverse(this.speed);
+		}
 	}
 
 	public goReverse ()
 	{
-		this.motors.forward(this.speed);
+		if (this.motors) {
+			this.motors.forward(this.speed);
+		}
 	}
 
 	public stop ()
 	{
-		this.motors.stop();
+		if (this.motors) {
+			this.motors.stop();
+		}
 	}
 
 	public speedUp ()

@@ -1,7 +1,8 @@
 import { Board, Motors, Servo } from 'johnny-five';
-import * as Raspi from 'raspi-io';
 
 import { Car } from './Car';
+
+const RaspiIO = require('raspi-io');
 
 export class CarFactory
 {
@@ -10,10 +11,10 @@ export class CarFactory
 		return new Car(this);
 	}
 
-	public createRaspiBoard (): Raspi
+	public createRaspiBoard (): Board
 	{
 		return new Board({
-			io: new Raspi()
+			io: new RaspiIO()
 		});
 	}
 

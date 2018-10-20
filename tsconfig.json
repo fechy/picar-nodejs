@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "watch": true
+    "lib": ["es2015"],
+    "inlineSourceMap": true
   }
 }

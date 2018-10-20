@@ -80,9 +80,9 @@ export class ControlPanel
 			this.webServer.close();
 		});
 
-		car.addEventListener('car:ready', () => this.gamepadSocket.listen(server, car));
+		car.on('car:ready', () => this.gamepadSocket.listen(server, car));
 
-		car.addEventListener('car:stop', () => this.webServer.close());
+		car.on('car:stop', () => this.webServer.close());
 
 		car.start();
 	}

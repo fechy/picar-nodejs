@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>livecam UI</title>
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+
+		<style type="text/css">
+			html, body, div, span, applet, object, iframe,
+			h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+			a, abbr, acronym, address, big, cite, code,
+			del, dfn, em, img, ins, kbd, q, s, samp,
+			small, strike, strong, sub, sup, tt, var,
+			b, u, i, center,
+			dl, dt, dd, ol, ul, li,
+			fieldset, form, label, legend,
+			table, caption, tbody, tfoot, thead, tr, th, td,
+			article, aside, canvas, details, embed,
+			figure, figcaption, footer, header, hgroup,
+			menu, nav, output, ruby, section, summary,
+			time, mark, audio, video {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+				vertical-align: baseline;
+			}
+			/* HTML5 display-role reset for older browsers */
+			article, aside, details, figcaption, figure,
+			footer, header, hgroup, menu, nav, section {
+				display: block;
+			}
+			body {
+				line-height: 1;
+			}
+			ol, ul {
+				list-style: none;
+			}
+			blockquote, q {
+				quotes: none;
+			}
+			blockquote:before, blockquote:after,
+			q:before, q:after {
+				content: '';
+				content: none;
+			}
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+			html,body,.feed,.feed img {
+				width:100%;
+				height:100%;
+				overflow:hidden;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="feed"><img id="video" src="" /></div>
+		<script>
+			const serverAddress = "{{uiAddress}}";
+			const serverPort = "{{uiPort}}";
+			const webcamAddress = "{{webcamAddress}}";
+			const webcamPort = "{{webcamPort}}";
+			const webcamHost = document.querySelector(".feed img");
+			const socketWebcam = io.connect(`http://${webcamAddress}:${webcamPort}`);
+			const socketGamepad = io.connect(`http://${serverAddress}:${serverPort}`);
+
+			socketWebcam.on('image', function (data) {
+				webcamHost.setAttribute("src", `data:image/jpeg;base64,${data}`);
+			});
+
+			window.addEventListener('gamepadconnected', function (event) {
+				console.log(event);
+				const gamepad = navigator.getGamepads()[event.gamepad.index];
+				console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+					gamepad.index, gamepad.id,gamepad.buttons.length, gamepad.axes.length
+				);
+				window.requestAnimationFrame(() => gamepadListener());
+			});
+
+			function gamepadListener ()
+			{
+				const gamepad = navigator.getGamepads()[0];
+
+				if (gamepad) {
+					const gamepadState = {
+						left: gamepad.axes[0] === -1,
+						right: gamepad.axes[0] === 1,
+						xCenter: gamepad.axes[0] === 0,
+						up: gamepad.axes[1] === -1,
+						down: gamepad.axes[1] === 1,
+						yCenter: gamepad.axes[1] === 0,
+						a: gamepad.buttons[0].pressed,
+						b: gamepad.buttons[1].pressed,
+						x: gamepad.buttons[3].pressed,
+						y: gamepad.buttons[4].pressed,
+						lt: gamepad.buttons[6].pressed,
+						rt: gamepad.buttons[7].pressed,
+						start: gamepad.buttons[11].pressed,
+						select: gamepad.buttons[10].pressed
+					};
+
+					socketGamepad.emit('buttons:state', gamepadState);
+				}
+
+				window.requestAnimationFrame(() => gamepadListener());
+			}
+
+		</script>
+	</body>
+</html>

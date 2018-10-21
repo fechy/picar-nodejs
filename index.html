@@ -64,13 +64,9 @@
 	<body>
 		<div class="feed"><img id="video" src="" /></div>
 		<script>
-			const serverAddress = "{{uiAddress}}";
-			const serverPort = "{{uiPort}}";
-			const webcamAddress = "{{webcamAddress}}";
-			const webcamPort = "{{webcamPort}}";
 			const webcamHost = document.querySelector(".feed img");
-			const socketWebcam = io.connect(`http://${webcamAddress}:${webcamPort}`);
-			const socketGamepad = io.connect(`http://${serverAddress}:${serverPort}`);
+			const socketWebcam = io.connect('https://{{webcamSocketAddress}}:{{webcamSocketPort}}');
+			const socketGamepad = io.connect('https://{{gamepadSocketAddress}}:{{gamepadSocketPort}}');
 
 			socketWebcam.on('image', function (data) {
 				webcamHost.setAttribute("src", `data:image/jpeg;base64,${data}`);

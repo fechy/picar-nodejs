@@ -1,23 +1,24 @@
 import * as Net from 'net';
-import * as Http from 'http';
 import * as SocketIO from 'socket.io';
+
+import { createHttpsServer } from "../Server";
 
 const Dicer = require('dicer');
 
 export class WebcamSocket {
 
-	public wrap (
+	public wrapGStreamBroadcast (
 		gStreamTcpAddress: string,
 		gStreamTcpPort: number,
-		broadcastTcpAddress: string,
-		broadcastTcpPort: number
+		webcamSocketAddress: string,
+		webcamSocketPort: number
 	): void {
 		const socket = new Net.Socket();
 
 		socket.connect(gStreamTcpPort, gStreamTcpAddress, () => {
 			const io = SocketIO.listen(
-				Http.createServer()
-					.listen(broadcastTcpPort, broadcastTcpAddress)
+				createHttpsServer()
+					.listen(webcamSocketPort, webcamSocketAddress)
 			);
 
 			const dicer = new Dicer({
@@ -38,15 +39,15 @@ export class WebcamSocket {
 			});
 
 			dicer.on('error', (e: Error) => {
-				console.log(`Dicer error: ${broadcastTcpAddress}:${broadcastTcpPort}\n`, e);
+				console.log(`Dicer error: ${webcamSocketAddress}:${webcamSocketPort}\n`, e);
 			});
 
 			dicer.on('finish', () => {
-				console.log(`Dicer finished: ${broadcastTcpAddress}:${broadcastTcpPort}`);
+				console.log(`Dicer finished: ${webcamSocketAddress}:${webcamSocketPort}`);
 			});
 
 			socket.on('close', () => {
-				console.log(`Socket closed: ${broadcastTcpAddress}:${broadcastTcpPort}`);
+				console.log(`Socket closed: ${webcamSocketAddress}:${webcamSocketPort}`);
 			});
 
 			socket.pipe(dicer);

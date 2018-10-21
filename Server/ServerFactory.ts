@@ -1,16 +1,42 @@
+import { createServer as newHttpServer, Server as HttpServer } from "http";
+import { createServer as newHttpsServer, Server as HttpsServer } from "https";
+import { createSecureServer, Http2SecureServer } from "http2";
+import { readFileSync } from "fs";
+
 import { GStreamServer } from './GStreamServer';
+import { Http2ServerWrapper } from "./Http2ServerWrapper";
 import { IGStreamServerOptions } from './IGStreamServerOptions';
-import { WebServer } from './WebServer';
 
-export class ServerFactory
+export function createGStreamServer (options: IGStreamServerOptions): GStreamServer
 {
-	public getGStreamServer (options: IGStreamServerOptions): GStreamServer
-	{
-		return new GStreamServer(options);
-	}
+	return new GStreamServer(options);
+}
 
-	public createWebServer (): WebServer
-	{
-		return new WebServer();
-	}
+export function createHttp2ServerWrapper (): Http2ServerWrapper
+{
+	return new Http2ServerWrapper();
+}
+
+export function createHttp2SecureServer (): Http2SecureServer
+{
+	return createSecureServer({
+		key: readFileSync('key.pem'),
+		cert: readFileSync('cert.pem')
+	});
+}
+
+export function createHttpsServer (): HttpsServer
+{
+	return newHttpsServer({
+		key: readFileSync('key.pem'),
+		cert: readFileSync('cert.pem')
+	})
+}
+
+export function createHttpServerRedirectToHttps (): HttpServer
+{
+	return newHttpServer((req, res) => {
+		res.writeHead(301,{Location: `https://${req.headers.host}${req.url}`});
+		res.end();
+	});
 }

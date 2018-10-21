@@ -1,12 +1,14 @@
 import * as SocketIO from 'socket.io';
-import * as Http from 'http';
 import { Car } from '../Car';
+import { createHttpsServer } from "../Server";
 
 export class GamepadSocket
 {
-	public listen (server: Http.Server, car: Car): void
+	public listen (address: string, port: number, car: Car): void
 	{
-		const io = SocketIO.listen(server);
+		const io = SocketIO.listen(
+			createHttpsServer().listen(port, address)
+		);
 
 		io.sockets.on('connection', (socket) => {
 

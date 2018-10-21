@@ -14,12 +14,11 @@ const gStreamServerOptions: IGStreamServerOptions = {
 const controlPanelOptions: IControlPanelOptions = {
 	gStreamTcpAddress: '192.168.0.17',
 	gStreamTcpPort: 10000,
-	uiAddress: '192.168.0.17',
-	uiPort: 11000,
-	broadcastAddress: '192.168.0.17',
-	broadcastPort: 12000,
-	gStreamServerOptions: gStreamServerOptions
+	gamepadSocketAddress: '192.168.0.17',
+	gamepadSocketPort: 11000,
+	webcamSocketAddress: '192.168.0.17',
+	webcamSocketPort: 12000
 };
 
-const controlPanel = new ControlPanel(new Factory(), controlPanelOptions);
+const controlPanel = new ControlPanel(new Factory(), controlPanelOptions, gStreamServerOptions);
 controlPanel.startComponents();

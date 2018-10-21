@@ -1,9 +1,6 @@
 import { WebcamSocket } from './WebcamSocket';
 
-export class WebcamFactory
+export function createWebCamSocket (): WebcamSocket
 {
-	public getWebCamSocket (): WebcamSocket
-	{
-		return new WebcamSocket()
-	}
+	return new WebcamSocket();
 }

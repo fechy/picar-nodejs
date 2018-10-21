@@ -16,6 +16,8 @@
   },
   "scripts": {
     "compile": "tsc",
+    "gen-cert": "openssl req -nodes -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365 && openssl rsa -in keytmp.pem -out key.pem",
+    "first:time": "yarn compile && yarn gen-cert",
     "start": "sudo node index.js",
     "start-test": "sudo node test.js"
   }

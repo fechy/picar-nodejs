@@ -79,6 +79,6 @@ export interface IHomepageTemplateVariables
 {
 	gamepadSocketAddress: string,
 	gamepadSocketPort: number,
-	webcamSocketAddress: string,
-	webcamSocketPort: number
+	webcamSocketAddress?: string,
+	webcamSocketPort?: number
 }

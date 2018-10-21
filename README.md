@@ -55,7 +55,7 @@ Connected in your Raspberry Pi (direct or ssh):
  1. Clone the repository in your Raspberry Pi.
  2. Access the repository folder in your terminal.
  3. Install dependencies, run: `yarn install`
- 4. Prepare code and generate ssl certificate: `yarn first:time`
+ 4. Prepare code and generate ssl certificate: `yarn first-time`
     
     This will compile ts into js and generate your certificates for the https server,
     
@@ -65,7 +65,7 @@ Connected in your Raspberry Pi (direct or ssh):
 
 With video: `yarn start`
 
-Without video: `yarn start-test`
+Without video: `yarn start:no-video`
 
 Running this command will open 2 sockets, one for sending the stream of your camera 
 and another to listen for the events of your gamepad.
@@ -90,4 +90,4 @@ Note: To stop press Ctrl+c on the idle terminal.
 
 ### Others
 #### To Compile Typescript
-`yarn compile` or set IDE to compile on save
+After changing the code run `yarn compile` to transpile to js or set IDE to compile on save

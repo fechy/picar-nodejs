@@ -64,13 +64,21 @@
 	<body>
 		<div class="feed"><img id="video" src="" /></div>
 		<script>
-			const webcamHost = document.querySelector(".feed img");
-			const socketWebcam = io.connect('https://{{webcamSocketAddress}}:{{webcamSocketPort}}');
-			const socketGamepad = io.connect('https://{{gamepadSocketAddress}}:{{gamepadSocketPort}}');
+			const webcamSocketAddress = '{{webcamSocketAddress}}';
+			const webcamSocketPort = '{{webcamSocketPort}}';
 
-			socketWebcam.on('image', function (data) {
-				webcamHost.setAttribute("src", `data:image/jpeg;base64,${data}`);
-			});
+			const webcamViewport = document.querySelector(".feed img");
+
+			if (webcamSocketAddress && webcamSocketPort) {
+
+				const socketWebcam = io.connect(`https://${webcamSocketAddress}:${webcamSocketPort}`);
+
+				socketWebcam.on('image', function (data) {
+					webcamViewport.setAttribute("src", `data:image/jpeg;base64,${data}`);
+				});
+			}
+
+			const socketGamepad = io.connect('https://{{gamepadSocketAddress}}:{{gamepadSocketPort}}');
 
 			window.addEventListener('gamepadconnected', function (event) {
 				console.log(event);

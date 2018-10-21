@@ -1,11 +1,10 @@
 import { Board, Motors, Servo } from 'johnny-five';
 import { EventEmitter } from 'events';
 
-import { CarFactory } from './CarFactory';
+import { createRaspiBoard, createMotors, createFrontWheelsServo, createPanServo, createTiltServo } from './CarFactory';
 
 export class Car extends EventEmitter
 {
-	private factory: CarFactory;
 	private board: Board;
 	private motors: Motors | undefined;
 	private frontWheelServo: Servo | undefined;
@@ -13,12 +12,11 @@ export class Car extends EventEmitter
 	private tiltServo: Servo | undefined;
 	private speed: number = 40;
 
-	public constructor (factory: CarFactory)
+	public constructor ()
 	{
 		super();
 
-		this.factory = factory;
-		this.board = this.factory.createRaspiBoard();
+		this.board = createRaspiBoard();
 	}
 
 	public start ()
@@ -43,10 +41,10 @@ export class Car extends EventEmitter
 
 	private startComponents (): void
 	{
-		this.motors = this.factory.createMotors();
-		this.frontWheelServo = this.factory.createFrontWheelsServo();
-		this.panServo = this.factory.createPanServo();
-		this.tiltServo = this.factory.createTiltServo();
+		this.motors = createMotors();
+		this.frontWheelServo = createFrontWheelsServo();
+		this.panServo = createPanServo();
+		this.tiltServo = createTiltServo();
 
 	}
 

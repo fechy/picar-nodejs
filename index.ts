@@ -1,5 +1,4 @@
 import { ControlPanel, IControlPanelOptions } from './ControlPanel';
-import { Factory } from './Factory';
 import { IGStreamServerOptions } from './Server';
 
 const gStreamServerOptions: IGStreamServerOptions = {
@@ -20,5 +19,5 @@ const controlPanelOptions: IControlPanelOptions = {
 	webcamSocketPort: 12000
 };
 
-const controlPanel = new ControlPanel(new Factory(), controlPanelOptions, gStreamServerOptions);
+const controlPanel = new ControlPanel(controlPanelOptions, gStreamServerOptions);
 controlPanel.startComponents();

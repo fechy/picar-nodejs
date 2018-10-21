@@ -1,67 +1,40 @@
 import { IControlPanelOptions } from './IControlPanelOptions';
-import { CarFactory } from '../Car';
-import { Factory } from '../Factory';
-import { WebcamSocket, createWebCamSocket } from '../Webcam';
-import { GamepadSocket } from '../Gamepad';
-import {
-	GStreamServer,
-	Http2ServerWrapper,
-	IGStreamServerOptions,
-	createGStreamServer,
-	createHttp2ServerWrapper
-} from '../Server';
-import { createGamepadSocket } from "../Gamepad/GamepadFactory";
+import { Car, createCar } from '../Car';
+import { createGamepadSocket } from '../Gamepad';
+import { createWebCamSocket } from '../Webcam';
+import { IGStreamServerOptions, createGStreamServer, createHttp2ServerWrapper } from '../Server';
 
 export class ControlPanel
 {
 	private options: IControlPanelOptions;
+	private readonly gstreamOptions: IGStreamServerOptions;
 
-	private factory: Factory;
-	private carFactory: CarFactory;
-
-	private webServer: Http2ServerWrapper;
-	private gStreamServer: GStreamServer;
-
-	private gamepadSocket: GamepadSocket;
-	private webcamSocket: WebcamSocket;
-
-	public constructor (
-		factory: Factory,
-		options: IControlPanelOptions,
-		gstreamOptions: IGStreamServerOptions
-	) {
+	public constructor (options: IControlPanelOptions, gstreamOptions: IGStreamServerOptions)
+	{
 		this.options = options;
-
-		this.factory = factory;
-		this.carFactory = this.factory.createCarFactory();
-
-		this.webServer = createHttp2ServerWrapper();
-		this.gStreamServer = createGStreamServer(gstreamOptions);
-
-		this.webcamSocket = createWebCamSocket();
-		this.gamepadSocket = createGamepadSocket();
+		this.gstreamOptions = gstreamOptions;
 	}
 
 	public startComponents ()
 	{
-		const car = this.carFactory.createCar();
-		const gStreamCamProcess = this.gStreamServer.start(
+		const car: Car = createCar();
+
+		const gStreamServer = createGStreamServer(this.gstreamOptions);
+		const webServer = createHttp2ServerWrapper();
+
+		const webcamSocket = createWebCamSocket();
+		const gamepadSocket = createGamepadSocket();
+
+		const gStreamCamProcess = gStreamServer.start(
 			this.options.gStreamTcpAddress,
 			this.options.gStreamTcpPort
 		);
-
-		this.webServer.serve({
-			gamepadSocketAddress: this.options.gamepadSocketAddress,
-			gamepadSocketPort: this.options.gamepadSocketPort,
-			webcamSocketAddress: this.options.webcamSocketAddress,
-			webcamSocketPort: this.options.webcamSocketPort,
-		});
 
 		gStreamCamProcess.stdout.on('data', (data) => {
 
 			if (data.toString().includes('Setting pipeline to PLAYING') > 0) {
 
-				this.webcamSocket.wrapGStreamBroadcast(
+				webcamSocket.wrapGStreamBroadcast(
 					this.options.gStreamTcpAddress,
 					this.options.gStreamTcpPort,
 					this.options.webcamSocketAddress,
@@ -83,7 +56,7 @@ export class ControlPanel
 		});*/
 
 		car.on('car:ready', () => {
-			this.gamepadSocket.listen(
+			gamepadSocket.listen(
 				this.options.gamepadSocketAddress,
 				this.options.gamepadSocketPort,
 				car
@@ -93,5 +66,12 @@ export class ControlPanel
 		car.on('car:stop', () => gStreamCamProcess.kill());
 
 		car.start();
+
+		webServer.serve({
+			gamepadSocketAddress: this.options.gamepadSocketAddress,
+			gamepadSocketPort: this.options.gamepadSocketPort,
+			webcamSocketAddress: this.options.webcamSocketAddress,
+			webcamSocketPort: this.options.webcamSocketPort,
+		});
 	}
 }

@@ -1,4 +1,5 @@
-export interface IControlPanelOptions {
+export interface IControlPanelOptions
+{
 	gStreamTcpAddress: string;
 	gStreamTcpPort: number;
 	gamepadSocketAddress: string

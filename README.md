@@ -52,15 +52,20 @@ Once we are done with this, we can pass to load the software into the PiCar-V
 ### First time
 
 Connected in your Raspberry Pi (direct or ssh):
+
  1. Clone the repository in your Raspberry Pi.
+
  2. Access the repository folder in your terminal.
+
  3. Install dependencies, run: `yarn install`
+
  4. Prepare code and generate ssl certificate: `yarn first-time`
     
-    This will compile ts into js and generate your certificates for the https server,
+This will compile ts into js and generate your certificates for the https server,
     
-    **Note: Follow the instructions on screen to generate the certificates, you can
-    press enter on all steps since this is for our localhost.** 
+**Note: Follow the instructions on screen to generate the certificates, you can
+press enter on all steps since this is for our localhost.** 
+
 ### Start Car
 
 With video: `yarn start`

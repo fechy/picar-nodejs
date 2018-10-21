@@ -1,0 +1,7 @@
+{
+  "short_name": "PiCar",
+  "name": "PiCar Controller",
+  "start_url": "http://192.168.0.17:11000/",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}

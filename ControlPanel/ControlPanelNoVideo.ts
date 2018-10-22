@@ -12,7 +12,7 @@ export class ControlPanelNoVideo
 		this.options = options;
 	}
 
-	public start () {
+	public startComponents () {
 
 		const car = createCar();
 		const webServer = createHttp2ServerWrapper();

@@ -68,9 +68,18 @@ press enter on all steps since this is for our localhost.**
 
 ### Start Car
 
-With video: `yarn start`
+With video: `yarn start raspberry-pi_ip`
 
-Without video: `yarn start:no-video`
+Without video: `yarn start raspberry-pi_ip false`
+
+> Example with video:
+```$bash
+yarn start 192.168.0.17
+```
+
+**Note: Provide the ip of your raspberry, this is used to render the 
+index.html and tell the sockets where to connect, servers and sockets
+are created on localhost**
 
 Running this command will open 2 sockets, one for sending the stream of your camera 
 and another to listen for the events of your gamepad.
@@ -78,10 +87,15 @@ and another to listen for the events of your gamepad.
 It will also start a server so you can see in your browser the video stream and once 
 connected a gamepad it will start sending the inputs to the PiCar.
 
-Now, on the computer or phone where you want to be controlling the PiCar,
-open your browser and navigate to the ip of your PiCar (it appears in the
-log when running the start command). You should be able to see the video stream.
+### Play
 
+Now, on the computer, phone or whatever device you want to be controlling the PiCar,
+open the browser and navigate to the ip of your PiCar
+
+> Example
+```bash
+https://192.168.0.17
+```
 Connect a gamepad to your device and make sure your browser asks
 for permissions to use the gamepad, accept and then you can have control
 of your PiCar.
@@ -91,8 +105,17 @@ are matching my device, but most of the controllers will find this
 mapping adequate. If you need to change it open the file [index.html](index.html)
 and adjust to your needs. Then restart the server.
 
-Note: To stop press Ctrl+c on the idle terminal.
+**Note: To stop all press Ctrl+c on the idle terminal**
 
 ### Others
+
+> Example without video:
+```$bash
+yarn start 192.168.0.17 false
+```
+
+Actually *false* can be anything, basically if there is anything written 
+after the ip it will use hte without video mode
+
 #### To Compile Typescript
 After changing the code run `yarn compile` to transpile to js or set IDE to compile on save

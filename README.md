@@ -73,6 +73,7 @@ With video: `yarn start raspberry-pi_ip`
 Without video: `yarn start raspberry-pi_ip false`
 
 > Example with video:
+
 ```$bash
 yarn start 192.168.0.17
 ```
@@ -93,9 +94,11 @@ Now, on the computer, phone or whatever device you want to be controlling the Pi
 open the browser and navigate to the ip of your PiCar
 
 > Example
+
 ```bash
 https://192.168.0.17
 ```
+
 Connect a gamepad to your device and make sure your browser asks
 for permissions to use the gamepad, accept and then you can have control
 of your PiCar.
@@ -110,6 +113,7 @@ and adjust to your needs. Then restart the server.
 ### Others
 
 > Example without video:
+
 ```$bash
 yarn start 192.168.0.17 false
 ```

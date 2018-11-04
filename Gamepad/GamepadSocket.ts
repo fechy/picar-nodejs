@@ -12,7 +12,7 @@ export class GamepadSocket
 
 		io.sockets.on('connection', (socket) => {
 
-			socket.on('buttons:state', (buttonsState) => {
+			socket.on('buttons:state:manual', (buttonsState) => {
 
 				if (buttonsState.up) {
 					car.goForward();
@@ -38,19 +38,19 @@ export class GamepadSocket
 					car.turnRight();
 				}
 
-				if (buttonsState.a){
+				if (buttonsState.a && !car.isPanSynchronized()){
 					car.panRight();
 				}
 
-				if (buttonsState.b){
+				if (buttonsState.b && !car.isTiltSynchronized()){
 					car.tiltDown();
 				}
 
-				if (buttonsState.x){
+				if (buttonsState.x && !car.isTiltSynchronized()){
 					car.tiltUp();
 				}
 
-				if (buttonsState.y){
+				if (buttonsState.y && !car.isPanSynchronized()){
 					car.panLeft();
 				}
 
@@ -66,6 +66,25 @@ export class GamepadSocket
 					car.turnForward();
 				}
 
+			});
+
+			socket.on('buttons:state:cardboard', (buttonsState) => {
+
+				if (!car.isPanSynchronized() && buttonsState.panInitialPoint) {
+					car.synchronizePan(+buttonsState.panInitialPoint);
+				}
+
+				if (!car.isTiltSynchronized() && buttonsState.tiltInitialPoint) {
+					car.synchronizeTilt(+buttonsState.tiltInitialPoint);
+				}
+
+				if (car.isPanSynchronized() && buttonsState.pan) {
+					car.panTo(buttonsState.pan);
+				}
+
+				if (car.isTiltSynchronized() && buttonsState.tilt) {
+					car.tiltTo(buttonsState.tilt)
+				}
 			});
 		});
 	}

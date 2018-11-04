@@ -1,6 +1,7 @@
 import { Board, Motors, Servo } from 'johnny-five';
 
 import { Car } from './Car';
+import { CustomServo } from "./CustomServo";
 
 const RaspiIO = require('raspi-io');
 
@@ -26,9 +27,9 @@ export function createFrontWheelsServo (): Servo
 	});
 }
 
-export function createPanServo (): Servo
+export function createPanServo (): CustomServo
 {
-	return new Servo({
+	return new CustomServo({
 		pin: 1,
 		controller: 'PCA9685',
 		range: [ 35, 70 ],
@@ -36,9 +37,9 @@ export function createPanServo (): Servo
 	});
 }
 
-export function createTiltServo (): Servo
+export function createTiltServo (): CustomServo
 {
-	return new Servo({
+	return new CustomServo({
 		pin: 2,
 		controller: 'PCA9685',
 		range: [ 42, 75 ],

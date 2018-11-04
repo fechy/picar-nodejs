@@ -2,7 +2,7 @@ import { Servo, ServoGeneralOption } from "johnny-five";
 
 export class CustomServo extends Servo
 {
-	public isSynchronized: boolean = false;
+	private synchronized: boolean = false;
 	private externalDeviceStartAt: number = 0;
 
 	public constructor (options: ServoGeneralOption)
@@ -13,7 +13,7 @@ export class CustomServo extends Servo
 	public synchronizeWithExternalDevice (startAt: number)
 	{
 		this.externalDeviceStartAt = startAt;
-		this.isSynchronized = true;
+		this.synchronized = true;
 	}
 
 	public moveTo (position: number)
@@ -28,6 +28,11 @@ export class CustomServo extends Servo
 			this.position < this.range[1] && this.position > this.range[0]) {
 			this.to(position);
 		}
+	}
+
+	public isSynchronized (): boolean
+	{
+		return this.synchronized;
 	}
 
 	private mapPosition (position: number)

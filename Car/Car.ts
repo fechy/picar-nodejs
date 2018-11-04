@@ -35,27 +35,9 @@ export class Car extends EventEmitter
 		this.board.on('exit', () => {
 			this.stop();
 			this.turnForward();
+			this.centerPanTil();
 			this.emit('car:stop');
 			console.log('car:stop');
-		});
-	}
-
-	private startComponents (): void
-	{
-		this.motors = createMotors();
-		this.frontWheelServo = createFrontWheelsServo();
-		this.panServo = createPanServo();
-		this.tiltServo = createTiltServo();
-
-	}
-
-	private startRepl (): void
-	{
-		this.board.repl.inject({
-			motors: this.motors,
-			frontServo: this.frontWheelServo,
-			pan: this.panServo,
-			tilt: this.tiltServo
 		});
 	}
 
@@ -179,7 +161,7 @@ export class Car extends EventEmitter
 
 	public isPanSynchronized (): boolean
 	{
-		return this.panServo ? this.panServo.isSynchronized : false;
+		return this.panServo ? this.panServo.isSynchronized() : false;
 	}
 
 	public synchronizePan (startAt: number): void
@@ -191,7 +173,7 @@ export class Car extends EventEmitter
 
 	public isTiltSynchronized (): boolean
 	{
-		return this.tiltServo ? this.tiltServo.isSynchronized : false;
+		return this.tiltServo ? this.tiltServo.isSynchronized() : false;
 	}
 
 	public synchronizeTilt (startAt: number): void
@@ -199,5 +181,23 @@ export class Car extends EventEmitter
 		if (this.tiltServo) {
 			this.tiltServo.synchronizeWithExternalDevice(startAt);
 		}
+	}
+
+	private startComponents (): void
+	{
+		this.motors = createMotors();
+		this.frontWheelServo = createFrontWheelsServo();
+		this.panServo = createPanServo();
+		this.tiltServo = createTiltServo();
+	}
+
+	private startRepl (): void
+	{
+		this.board.repl.inject({
+			motors: this.motors,
+			frontServo: this.frontWheelServo,
+			pan: this.panServo,
+			tilt: this.tiltServo
+		});
 	}
 }

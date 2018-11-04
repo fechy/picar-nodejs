@@ -116,6 +116,8 @@
 			let controlManual = true;
 			let controlCardboard = false;
 
+			let isRequestedAnimationFrame = false;
+
 			const webcamSocketAddress = '{{webcamSocketAddress}}';
 			const webcamSocketPort = '{{webcamSocketPort}}';
 
@@ -146,20 +148,27 @@
 				console.log('Gamepad connected at index %d: %s. %d buttons, %d axes.',
 					gamepad.index, gamepad.id,gamepad.buttons.length, gamepad.axes.length
 				);
-				window.requestAnimationFrame(() => gamepadListener());
+
+				if (!isRequestedAnimationFrame) {
+					window.requestAnimationFrame(() => gamepadListener());
+				}
 			});
 
 			cardboardToggler.addEventListener('click', function () {
 				cardboardToggler.classList.toggle('is-active');
 				controlManual = !controlManual;
 				controlCardboard = !controlCardboard;
-				if (controlCardboard) {
+				if (controlCardboard && !isRequestedAnimationFrame) {
 					window.requestAnimationFrame(() => gamepadListener());
 				}
 			});
 
 			function gamepadListener ()
 			{
+				if (!isRequestedAnimationFrame) {
+					isRequestedAnimationFrame = true;
+				}
+
 				const gamepad = navigator.getGamepads()[0];
 
 				if (gamepad) {

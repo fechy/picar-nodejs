@@ -22,8 +22,8 @@ export function createFrontWheelsServo (): Servo
 	return new Servo({
 		pin: 0,
 		controller: 'PCA9685',
-		range: [ 50, 75 ],
-		startAt: 62.5
+		range: [ 50, 78 ],
+		startAt: 64
 	});
 }
 
@@ -32,7 +32,7 @@ export function createPanServo (): CustomServo
 	return new CustomServo({
 		pin: 1,
 		controller: 'PCA9685',
-		range: [ 35, 70 ],
+		range: [ 30, 75 ],
 		startAt: 52.5
 	});
 }
@@ -42,8 +42,8 @@ export function createTiltServo (): CustomServo
 	return new CustomServo({
 		pin: 2,
 		controller: 'PCA9685',
-		range: [ 42, 75 ],
-		startAt: 58.5
+		range: [ 40, 80 ],
+		startAt: 60
 	});
 }
 

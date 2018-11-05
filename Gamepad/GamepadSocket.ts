@@ -69,15 +69,6 @@ export class GamepadSocket
 			});
 
 			socket.on('buttons:state:cardboard', (buttonsState) => {
-
-				if (!car.isPanSynchronized() && buttonsState.panInitialPoint) {
-					car.synchronizePan(+buttonsState.panInitialPoint);
-				}
-
-				if (!car.isTiltSynchronized() && buttonsState.tiltInitialPoint) {
-					car.synchronizeTilt(+buttonsState.tiltInitialPoint);
-				}
-
 				if (car.isPanSynchronized() && buttonsState.pan) {
 					car.panTo(buttonsState.pan);
 				}
@@ -85,6 +76,14 @@ export class GamepadSocket
 				if (car.isTiltSynchronized() && buttonsState.tilt) {
 					car.tiltTo(buttonsState.tilt)
 				}
+			});
+
+			socket.on('synchronize:pan', (startingPoint) => {
+				car.synchronizePan(startingPoint);
+			});
+
+			socket.on('synchronize:tilt', (startingPoint) => {
+				car.synchronizeTilt(startingPoint);
 			});
 		});
 	}

@@ -7,7 +7,6 @@
 		<title>livecam UI</title>
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 
 		<style type="text/css">
 			html, body, div, span, applet, object, iframe,
@@ -124,10 +123,8 @@
 			const webcamViewport = document.querySelectorAll('.feed img');
 			const cardboardToggler = document.querySelector('.toggle-cardboard');
 
-			let panInitialPoint = null;
-			let tiltInitialPoint = null;
-			let panTilt = { x: 0, y:0 };
-			const throttledProcessGyro = _.throttle(processGyro, 250);
+			let isPanTiltSynchronized = false;
+			let panTilt = null;
 
 			if (webcamSocketAddress && webcamSocketPort) {
 
@@ -161,6 +158,10 @@
 				if (controlCardboard && !isRequestedAnimationFrame) {
 					window.requestAnimationFrame(() => gamepadListener());
 				}
+
+				if (controlCardboard) {
+					synchronizePanTilt();
+				}
 			});
 
 			function gamepadListener ()
@@ -192,13 +193,11 @@
 					socketGamepad.emit('buttons:state:manual', gamepadState);
 				}
 
-				if (controlCardboard) {
+				if (controlCardboard && panTilt) {
 
 					const gamepadState = {
 						pan: panTilt.x,
-						tilt: panTilt.y,
-						panInitialPoint,
-						tiltInitialPoint
+						tilt: panTilt.y
 					};
 
 					socketGamepad.emit('buttons:state:cardboard', gamepadState);
@@ -212,17 +211,25 @@
 			if (window.DeviceOrientationEvent)
 			{
 				cardboardToggler.classList.remove('hide');
-				window.addEventListener("deviceorientation", () => {
+				window.addEventListener("deviceorientation", (event) => handleDeviceOrientation(event));
+			}
 
-					panTilt = throttledProcessGyro(event.alpha, event.gamma);
+			function handleDeviceOrientation (event)
+			{
+				panTilt = processGyro(event.alpha, event.gamma);
 
-					if (panInitialPoint === null && panTilt) {
-						panInitialPoint = panTilt.x;
-					}
-					if (tiltInitialPoint === null && panTilt) {
-						tiltInitialPoint = panTilt.y;
-					}
-				});
+				if (!isPanTiltSynchronized) {
+					isPanTiltSynchronized = true;
+					synchronizePanTilt();
+				}
+			}
+
+			function synchronizePanTilt ()
+			{
+				if (panTilt) {
+					socketGamepad.emit('synchronize:pan', panTilt.x);
+					socketGamepad.emit('synchronize:tilt', panTilt.y);
+				}
 			}
 
 			function processGyro(alpha, gamma)

@@ -227,9 +227,13 @@
 
 			function processGyro(alpha, gamma)
 			{
-				return { x: Math.round(alpha/10), y: Math.round(gamma) };
-			}
+				const lookingUp = gamma >= 0 && gamma <= 90;
 
+				return {
+					x: Math.round(lookingUp ? alpha >= 180 ? alpha - 180 : alpha + 180 : alpha),
+					y: Math.round(lookingUp >= 0 && gamma <= 90 ? 180 - gamma : -gamma)
+				}
+			}
 		</script>
 	</body>
 </html>

@@ -123,3 +123,21 @@ after the ip it will use hte without video mode
 
 #### To Compile Typescript
 After changing the code run `yarn compile` to transpile to js or set IDE to compile on save
+
+### Connect Bluetooth Controller
+On your Raspberry pi run:
+
+```
+sudo bluetoothctl
+```
+
+That will run the bluetooth service. It will show you a list of nearby devices and their MAC address.
+Copy the MAC of your game controller. If not list is shown, run:
+```
+devices
+```
+To connect:
+
+```
+connect E1:1D:D8:23:61:89
+```

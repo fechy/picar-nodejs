@@ -10,9 +10,9 @@ export class GamepadSocket
 			createHttpsServer().listen(port, address)
 		);
 
-		io.sockets.on('connection', (socket) => {
+		io.sockets.on('connection', (socket: SocketIO.Socket) => {
 
-			socket.on('buttons:state:manual', (buttonsState) => {
+			socket.on('buttons:state:manual', (buttonsState: any) => {
 
 				if (buttonsState.up) {
 					car.goForward();
@@ -68,7 +68,7 @@ export class GamepadSocket
 
 			});
 
-			socket.on('buttons:state:cardboard', (buttonsState) => {
+			socket.on('buttons:state:cardboard', (buttonsState:any) => {
 				if (car.isPanSynchronized() && buttonsState.pan) {
 					car.panTo(buttonsState.pan);
 				}
@@ -78,11 +78,11 @@ export class GamepadSocket
 				}
 			});
 
-			socket.on('synchronize:pan', (startingPoint) => {
+			socket.on('synchronize:pan', (startingPoint: number) => {
 				car.synchronizePan(startingPoint);
 			});
 
-			socket.on('synchronize:tilt', (startingPoint) => {
+			socket.on('synchronize:tilt', (startingPoint:number) => {
 				car.synchronizeTilt(startingPoint);
 			});
 		});

@@ -1,4 +1,4 @@
-import { Board, Motors, Servo } from 'johnny-five';
+import { Board, Motor, Servo } from 'johnny-five';
 
 import { Car } from './Car';
 import { CustomServo } from "./CustomServo";
@@ -42,15 +42,15 @@ export function createTiltServo (): CustomServo
 	return new CustomServo({
 		pin: 2,
 		controller: 'PCA9685',
-		range: [ 40, 80 ],
-		startAt: 60
+		range: [ 0, 80 ],
+		startAt: 45 //60
 	});
 }
 
-export function createMotors (): Motors
+export function createMotors (): Array<Motor>
 {
-	return new Motors([
-		{ controller: 'PCA9685', pins: { pwm: 4, dir: 6 }},
-		{ controller: 'PCA9685', pins: { pwm: 5, dir: 7 }}
-	]);
+	return [
+		new Motor({ controller: 'PCA9685', pins: { pwm: 4, dir: 7 }}),
+		new Motor({ controller: 'PCA9685', pins: { pwm: 5, dir: 6 }})
+	];
 }

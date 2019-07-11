@@ -11,60 +11,97 @@ export class GamepadSocket
 		);
 
 		io.sockets.on('connection', (socket: SocketIO.Socket) => {
-
 			socket.on('buttons:state:manual', (buttonsState: any) => {
 
-				if (buttonsState.up) {
+				if (buttonsState.forward) {
 					car.goForward();
-				}
-
-				if (buttonsState.down) {
+				} else if (buttonsState.backward) {
 					car.goReverse();
-				}
-
-				if (buttonsState.rt) {
-					car.speedUp();
-				}
-
-				if (buttonsState.lt) {
-					car.speedDown();
+				} else {
+					car.stop();
 				}
 
 				if (buttonsState.left) {
 					car.turnLeft();
-				}
-
-				if (buttonsState.right) {
+				} else if (buttonsState.right) {
 					car.turnRight();
+				} else if (buttonsState.center) {
+					car.turnForward();
 				}
 
-				if (buttonsState.a && !car.isPanSynchronized()){
-					car.panRight();
-				}
-
-				if (buttonsState.b && !car.isTiltSynchronized()){
+				if (buttonsState.panUp) {
+					car.tiltUp();
+				} else if (buttonsState.panDown) {
 					car.tiltDown();
 				}
 
-				if (buttonsState.x && !car.isTiltSynchronized()){
-					car.tiltUp();
-				}
-
-				if (buttonsState.y && !car.isPanSynchronized()){
+				if (buttonsState.panLeft) {
 					car.panLeft();
+				} else if (buttonsState.panRight) {
+					car.panRight();
 				}
-
-				if (buttonsState.start) {
+				
+				if (buttonsState.panReset) {
 					car.centerPanTil();
 				}
 
-				if (buttonsState.yCenter) {
-					car.stop();
+				if (buttonsState.speedUp) {
+					car.speedUp();
+				} else if (buttonsState.speedDown) {
+					car.speedDown();
 				}
 
-				if (buttonsState.xCenter) {
-					car.turnForward();
-				}
+				// if (buttonsState.up) {
+				// 	car.goForward();
+				// }
+
+				// if (buttonsState.down) {
+				// 	car.goReverse();
+				// }
+
+				// if (buttonsState.rt) {
+				// 	car.speedUp();
+				// }
+
+				// if (buttonsState.lt) {
+				// 	car.speedDown();
+				// }
+
+				// if (buttonsState.left) {
+				// 	car.turnLeft();
+				// }
+
+				// if (buttonsState.right) {
+				// 	car.turnRight();
+				// }
+
+				// if (buttonsState.a && !car.isPanSynchronized()){
+				// 	car.panRight();
+				// }
+
+				// if (buttonsState.b && !car.isTiltSynchronized()){
+				// 	car.tiltDown();
+				// }
+
+				// if (buttonsState.x && !car.isTiltSynchronized()){
+				// 	car.tiltUp();
+				// }
+
+				// if (buttonsState.y && !car.isPanSynchronized()){
+				// 	car.panLeft();
+				// }
+
+				// if (buttonsState.start) {
+				// 	car.centerPanTil();
+				// }
+
+				// if (buttonsState.yCenter) {
+				// 	car.stop();
+				// }
+
+				// if (buttonsState.xCenter) {
+				// 	car.turnForward();
+				// }
 
 			});
 

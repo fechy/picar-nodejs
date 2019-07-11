@@ -1,4 +1,4 @@
-import { Board, Motors, Servo } from 'johnny-five';
+import { Board, Motor, Servo } from 'johnny-five';
 import { EventEmitter } from 'events';
 
 import { createRaspiBoard, createMotors, createFrontWheelsServo, createPanServo, createTiltServo } from './CarFactory';
@@ -7,11 +7,11 @@ import { CustomServo } from "./CustomServo";
 export class Car extends EventEmitter
 {
 	private board: Board;
-	private motors: Motors | undefined;
+	private motors: Array<Motor> | undefined;
 	private frontWheelServo: Servo | undefined;
 	private panServo: CustomServo | undefined;
 	private tiltServo: CustomServo | undefined;
-	private speed: number = 40;
+	private speed: number = 100;
 
 	public constructor ()
 	{
@@ -44,21 +44,24 @@ export class Car extends EventEmitter
 	public goForward ()
 	{
 		if (this.motors){
-			this.motors.reverse(this.speed);
+			this.motors[0].reverse(this.speed);
+			this.motors[1].forward(this.speed);
 		}
 	}
 
 	public goReverse ()
 	{
 		if (this.motors) {
-			this.motors.forward(this.speed);
+			this.motors[0].forward(this.speed);
+			this.motors[1].reverse(this.speed);
 		}
 	}
 
 	public stop ()
 	{
 		if (this.motors) {
-			this.motors.stop();
+			this.motors[0].stop();
+			this.motors[1].stop();
 		}
 	}
 
@@ -79,14 +82,14 @@ export class Car extends EventEmitter
 	public turnLeft ()
 	{
 		if (this.frontWheelServo) {
-			this.frontWheelServo.min();
+			this.frontWheelServo.to(this.frontWheelServo.position - 1);
 		}
 	}
 
 	public turnRight ()
 	{
 		if (this.frontWheelServo) {
-			this.frontWheelServo.max();
+			this.frontWheelServo.to(this.frontWheelServo.position + 1);
 		}
 	}
 

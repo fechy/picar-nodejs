@@ -17,6 +17,7 @@ export class GamepadBluetooth
 
 		gamepad.on('move', (id, axis, value) => this.mapMoving(id, axis, value));
 		gamepad.on('down', (id, buttonNumber) => this.mapButtons(buttonNumber));
+		gamepad.on('up', (id, buttonNumber) => this.mapButtons(buttonNumber));
 	}
 
 	private mapMoving (id: number, axis: number, value: number): void
@@ -43,6 +44,7 @@ export class GamepadBluetooth
 
 	private mapButtons (buttonNumber: number): void
 	{
+		console.log(buttonNumber);
 		switch (buttonNumber) {
 			case 0:
 				console.log('pan right');

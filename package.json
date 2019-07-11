@@ -7,13 +7,16 @@
     "compile": "tsc",
     "gen-cert": "openssl req -nodes -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365 && openssl rsa -in keytmp.pem -out key.pem",
     "first-time": "yarn compile && yarn gen-cert",
-    "start": "sudo node index.js"
+    "start": "sudo node index.js $(hostname -I | cut -d' ' -f1)",
+    "go-dev": "nodemon --exec \"npm run compile & npm run start $(hostname -I | cut -d' ' -f1)\""
   },
   "dependencies": {
     "dicer": "^0.2.5",
     "gamepad": "^1.6.0",
+    "gstreamer": "^1.0.3",
     "johnny-five": "^1.0.0",
     "mustache": "^3.0.1",
+    "nodemon": "^1.19.1",
     "raspi-io": "^9.0.0",
     "socket.io": "^2.1.1"
   },
@@ -23,5 +26,11 @@
     "@types/mustache": "^0.8.32",
     "@types/socket.io": "^2.1.0",
     "typescript": "^3.1.6"
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [
+      "*.ts", "node_modules"
+    ]
   }
 }

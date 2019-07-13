@@ -3,7 +3,7 @@ import { Board, Motor, Servo } from 'johnny-five';
 import { Car } from './Car';
 import { CustomServo } from "./CustomServo";
 
-const RaspiIO = require('raspi-io');
+const RaspiIO = require('raspi-io').RaspiIO;
 
 export function createCar (): Car
 {
@@ -50,7 +50,7 @@ export function createTiltServo (): CustomServo
 export function createMotors (): Array<Motor>
 {
 	return [
-		new Motor({ controller: 'PCA9685', pins: { pwm: 4, dir: 7 }}),
-		new Motor({ controller: 'PCA9685', pins: { pwm: 5, dir: 6 }})
+		new Motor({ controller: 'PCA9685', pins: { pwm: 8, dir: 10 }}),
+		new Motor({ controller: 'PCA9685', pins: { pwm: 9, dir: 11 }})
 	];
 }

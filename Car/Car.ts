@@ -67,15 +67,13 @@ export class Car extends EventEmitter
 
 	public speedUp ()
 	{
-		if (this.speed < 240) {
-			this.speed += 1;
-		}
+		this.speed = Math.min(this.speed + 1, 240);
 	}
 
 	public speedDown ()
 	{
 		if (this.speed > 40) {
-			this.speed -= 1;
+			this.speed = Math.max(this.speed - 1, 0);
 		}
 	}
 

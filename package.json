@@ -7,24 +7,44 @@
     "compile": "tsc",
     "gen-cert": "openssl req -nodes -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365 && openssl rsa -in keytmp.pem -out key.pem",
     "first-time": "yarn compile && yarn gen-cert",
-    "start": "sudo node index.js $(hostname -I | cut -d' ' -f1)"
+    "start": "node index.js $(hostname -I | cut -d' ' -f1)",
+    "dev": "nodemon --exec npm run start",
+    "build:js": "webpack --watch --info-verbosity verbose",
+    "build:ts": "tsc --watch",
+    "build": "npm-run-all --continue-on-error --print-label --parallel build:js build:ts"
   },
   "dependencies": {
+    "@tensorflow-models/coco-ssd": "^1.1.1",
+    "@types/node": "^12.6.2",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.4",
     "dicer": "^0.3.0",
     "gamepad": "^1.6.0",
     "gstreamer": "^1.0.3",
     "johnny-five": "^1.0.0",
     "mustache": "^3.0.1",
     "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
     "raspi-io": "^10.0.2",
-    "socket.io": "^2.2.0"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "socket.io": "^2.2.0",
+    "ts-loader": "^6.0.4",
+    "webpack": "^4.35.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-react": "^7.0.0",
     "@types/gamepad": "^1.5.0",
     "@types/johnny-five": "^0.0.41",
     "@types/mustache": "^0.8.32",
     "@types/socket.io": "^2.1.0",
-    "typescript": "^3.1.6"
+    "babel-loader": "^8.0.6",
+    "tslint": "^5.18.0",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.1.6",
+    "webpack-cli": "^3.3.5"
   },
   "nodemonConfig": {
     "verbose": true,

@@ -1,7 +1,30 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "lib": ["es2015"],
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "jsx": "react",
+    "plugins": [{
+      "name": "typescript-tslint-plugin"
+    }],
+    "allowSyntheticDefaultImports": true,
+    "allowUmdGlobalAccess": true,
+    "types" : ["node", "react"]
+  },
+  "defaultSeverity": "error",
+  "jsRules": {},
+  "rules": {
+    "member-access": false,
+    "ordered-imports": false,
+    "quotemark": false,
+    "no-console": false,
+    "semicolon": false,
+    "jsx-no-lambda": false
+  },
+  "rulesDirectory": [
+  ],
+  "linterOptions": {
+    "exclude": [
+        "config/**/*.js",
+        "node_modules/**/*.ts"
+   ]
   }
 }

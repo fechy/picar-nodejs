@@ -5,6 +5,7 @@
 		<link rel="manifest" href="manifest.json">
 
 		<title>livecam UI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 
@@ -102,175 +103,15 @@
 	</head>
 
 	<body>
-		<div class="feed">
-			<span class="toggle-cardboard hide">
-				<svg style="width:124px;height:124px" viewBox="0 0 24 24">
-					<path fill="#888888" d="M20.74,6H3.2C2.55,6 2,6.57 2,7.27V17.73C2,18.43 2.55,19 3.23,19H8C8.54,19 9,18.68 9.16,18.21L10.55,14.74C10.79,14.16 11.35,13.75 12,13.75C12.65,13.75 13.21,14.16 13.45,14.74L14.84,18.21C15.03,18.68 15.46,19 15.95,19H20.74C21.45,19 22,18.43 22,17.73V7.27C22,6.57 21.45,6 20.74,6M7.22,14.58C6,14.58 5,13.55 5,12.29C5,11 6,10 7.22,10C8.44,10 9.43,11 9.43,12.29C9.43,13.55 8.44,14.58 7.22,14.58M16.78,14.58C15.56,14.58 14.57,13.55 14.57,12.29C14.57,11.03 15.56,10 16.78,10C18,10 19,11.03 19,12.29C19,13.55 18,14.58 16.78,14.58Z" />
-				</svg>
-			</span>
-			<img class="video" src="no-signal.png" />
-			<img class="video" src="no-signal.png" />
-		</div>
+		<div id="root"></div>
 		<script>
-			let controlManual = true;
-			let controlCardboard = false;
-
-			let isRequestedAnimationFrame = false;
-
-			const webcamSocketAddress = '{{webcamSocketAddress}}';
-			const webcamSocketPort = '{{webcamSocketPort}}';
-
-			const webcamViewport = document.querySelectorAll('.feed img');
-			const cardboardToggler = document.querySelector('.toggle-cardboard');
-
-			let isPanTiltSynchronized = false;
-			let panTilt = null;
-
-			if (webcamSocketAddress && webcamSocketPort) {
-
-				const socketWebcam = io.connect(`https://${webcamSocketAddress}:${webcamSocketPort}`);
-
-				socketWebcam.on('image', function (data) {
-					for (let i = 0; i < webcamViewport.length; i++) {
-						webcamViewport[i].setAttribute('src', `data:image/jpeg;base64,${data}`);
-					}
-				});
-			}
-
-			const socketGamepad = io.connect('https://{{gamepadSocketAddress}}:{{gamepadSocketPort}}');
-
-			window.addEventListener('gamepadconnected', function (event) {
-				console.log(event);
-				const gamepad = navigator.getGamepads()[event.gamepad.index];
-				console.log('Gamepad connected at index %d: %s. %d buttons, %d axes.',
-					gamepad.index, gamepad.id,gamepad.buttons.length, gamepad.axes.length
-				);
-
-				if (!isRequestedAnimationFrame) {
-					window.requestAnimationFrame(() => gamepadListener());
-				}
-			});
-
-			cardboardToggler.addEventListener('click', function () {
-				cardboardToggler.classList.toggle('is-active');
-				controlManual = !controlManual;
-				controlCardboard = !controlCardboard;
-				if (controlCardboard && !isRequestedAnimationFrame) {
-					window.requestAnimationFrame(() => gamepadListener());
-				}
-
-				if (controlCardboard) {
-					synchronizePanTilt();
-				}
-			});
-
-			function gamepadListener ()
-			{
-				if (!isRequestedAnimationFrame) {
-					isRequestedAnimationFrame = true;
-				}
-
-				const gamepad = navigator.getGamepads()[0];
-
-				// gamepad.buttons.map((btn, i) => {
-				// 	if (btn.pressed) {
-				// 		console.log(`Button ${i} pressed`);
-				// 	}
-				// })
-
-				if (gamepad) {
-					const gamepadState = {
-						left: gamepad.axes[0] === -1,
-						right: gamepad.axes[0] === 1,
-						xCenter: gamepad.axes[0] === 0,
-						up: gamepad.axes[1] === -1,
-						down: gamepad.axes[1] === 1,
-						yCenter: gamepad.axes[1] === 0,
-						center: gamepad.buttons[10].pressed,
-
-						panLeft: gamepad.axes[2] === -1,
-						panRight: gamepad.axes[2] === 1,
-						panUp: gamepad.axes[3] === -1,
-						panDown: gamepad.axes[3] === 1,
-						panReset: gamepad.buttons[11].pressed,
-
-						/**
-						  star = 3
-							square = 2
-							x = 0
-							circle = 1
-
-							L1 = 4
-							L2 = 6
-							R1 = 5
-							R2 = 7
-						*/
-						speedUp: gamepad.buttons[4].pressed,
-						speedDown: gamepad.buttons[6].pressed,
-						forward: gamepad.buttons[1].pressed,
-						backward: gamepad.buttons[0].pressed,
-
-						a: gamepad.buttons[0].pressed,
-						b: gamepad.buttons[1].pressed,
-						x: gamepad.buttons[3].pressed,
-						y: gamepad.buttons[4].pressed,
-						lt: gamepad.buttons[6].pressed,
-						rt: gamepad.buttons[7].pressed,
-						start: gamepad.buttons[11].pressed,
-						select: gamepad.buttons[10].pressed
-					};
-
-					socketGamepad.emit('buttons:state:manual', gamepadState);
-				}
-
-				if (controlCardboard && panTilt) {
-
-					const gamepadState = {
-						pan: panTilt.x,
-						tilt: panTilt.y
-					};
-
-					socketGamepad.emit('buttons:state:cardboard', gamepadState);
-				}
-
-				window.requestAnimationFrame(() => gamepadListener());
-			}
-
-			// Alpha = X = in landscape is left-right
-			// Gamma = Y = in landscape is up-down
-			if (window.DeviceOrientationEvent)
-			{
-				cardboardToggler.classList.remove('hide');
-				window.addEventListener("deviceorientation", (event) => handleDeviceOrientation(event));
-			}
-
-			function handleDeviceOrientation (event)
-			{
-				panTilt = processGyro(event.alpha, event.gamma);
-
-				if (!isPanTiltSynchronized) {
-					isPanTiltSynchronized = true;
-					synchronizePanTilt();
-				}
-			}
-
-			function synchronizePanTilt ()
-			{
-				if (panTilt) {
-					socketGamepad.emit('synchronize:pan', panTilt.x);
-					socketGamepad.emit('synchronize:tilt', panTilt.y);
-				}
-			}
-
-			function processGyro(alpha, gamma)
-			{
-				const lookingUp = gamma >= 0 && gamma <= 90;
-
-				return {
-					x: Math.round(lookingUp ? alpha >= 180 ? alpha - 180 : alpha + 180 : alpha),
-					y: Math.round(lookingUp >= 0 && gamma <= 90 ? 180 - gamma : -gamma)
-				}
-			}
+			var initialState = {
+				webcamSocketAddress: '{{webcamSocketAddress}}',
+				webcamSocketPort: '{{webcamSocketPort}}',
+				gamepadSocketAddress: '{{gamepadSocketAddress}}',
+				gamepadSocketPort: '{{gamepadSocketPort}}'
+			};
 		</script>
+		<script src="build/bundle.js"></script>
 	</body>
 </html>

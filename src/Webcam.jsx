@@ -6,9 +6,7 @@ const colors = {
   ["person"]: "#FF0000",
 }
 
-const Webcam = ({ address, port }) => {
-  const [ image, setImage ] = useState('no-signal.png');
-
+const Webcam = () => {
   const imageRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -58,38 +56,32 @@ const Webcam = ({ address, port }) => {
     }
   };
 
-  function initializeModel() {
-    return cocoSsd.load();
+  async function initializeModel(image) {
+    const model = await cocoSsd.load('lite_mobilenet_v2');
+
+    const predictions = await model.detect(image);
+    renderPredictions(predictions);
+
+    setInterval(async () => {
+      const predictions = await model.detect(image);
+      renderPredictions(predictions);
+    }, 100);
   }
 
   useEffect(() => {
-    if (imageRef) {
-      initializeModel()
-        .then(model => {
-
-          console.log('Model initiated');
-
-          model.detect(imageRef.current)
-            .then(predictions => {
-              renderPredictions(predictions);
-
-              setInterval(() => {
-                model.detect(imageRef.current)
-                  .then(renderPredictions);
-              }, 100);
-            });
-      });
+    if (imageRef.current) {
+      initializeModel(imageRef.current);
     }
 
     return () => {
       
     }
-  }, [address, port, imageRef]);
+  }, [imageRef]);
 
   return (
     <div>
-      <img ref={imageRef} className="video fixed" src={`/stream`} alt="no signal" crossOrigin="anonymous" />
-      <canvas ref={canvasRef} className="video fixed" />
+      <img ref={imageRef} className="fixed" width="640" height="480" src={`/stream`} alt="no signal" crossOrigin="anonymous" />
+      <canvas ref={canvasRef} className="fixed" width="640" height="480" />
     </div>
   )
 }

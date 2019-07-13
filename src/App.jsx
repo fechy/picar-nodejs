@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import 'babel-polyfill';
+
 import getConfig from './config';
 
 import GamePad from './GamePad';

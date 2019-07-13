@@ -19,41 +19,38 @@ export class ControlPanel
 	{
 		const car: Car = createCar();
 
-		const gStreamServer = createGStreamServer(this.gstreamOptions);
 		const webServer = createHttp2ServerWrapper();
-
-		const webcamSocket = createWebCamSocket();
 		const gamepadSocket = createGamepadSocket();
 
-		const gStreamCamProcess = gStreamServer.start(
-			this.options.gStreamTcpAddress,
-			this.options.gStreamTcpPort
-		);
+		// const gStreamCamProcess = gStreamServer.start(
+		// 	this.options.gStreamTcpAddress,
+		// 	this.options.gStreamTcpPort
+		// );
 
-		gStreamCamProcess.stdout.on('data', (data) => {
+		// gStreamCamProcess.stdout.on('data', (data) => {
 
-			if (data.toString().includes('Setting pipeline to PLAYING') > 0) {
+		// 	if (data.toString().includes('Setting pipeline to PLAYING') > 0) {
 
-				webcamSocket.wrapGStreamBroadcast(
-					this.options.gStreamTcpAddress,
-					this.options.gStreamTcpPort,
-					this.options.webcamSocketAddress,
-					this.options.webcamSocketPort
-				);
-			}
-		});
+		// 		webcamSocket.wrapGStreamBroadcast(
+		// 			this.options.gStreamTcpAddress,
+		// 			this.options.gStreamTcpPort,
+		// 			this.options.webcamSocketAddress,
+		// 			this.options.webcamSocketPort
+		// 		);
+		// 	}
+		// });
 
-		/*gStreamCamProcess.stderr.on('data', (data) => {
-			console.log(`Webcam server error: ${data}`);
-		});
+		// gStreamCamProcess.stderr.on('data', (data) => {
+		// 	console.log(`Webcam server error: ${data}`);
+		// });
 
-		gStreamCamProcess.on('error', (err) => {
-			console.log(`Webcam server error: ${err}`);
-		});
+		// gStreamCamProcess.on('error', (err) => {
+		// 	console.log(`Webcam server error: ${err}`);
+		// });
 
-		gStreamCamProcess.on('exit', (code) => {
-			console.log(`Webcam server exited: ${code}`);
-		});*/
+		// gStreamCamProcess.on('exit', (code) => {
+		// 	console.log(`Webcam server exited: ${code}`);
+		// });
 
 		car.on('car:ready', () => {
 			gamepadSocket.listen(
@@ -63,7 +60,7 @@ export class ControlPanel
 			);
 		});
 
-		car.on('car:stop', () => gStreamCamProcess.kill());
+		// car.on('car:stop', () => gStreamCamProcess.kill());
 
 		car.start();
 
@@ -72,6 +69,7 @@ export class ControlPanel
 			gamepadSocketPort: this.options.gamepadSocketPort,
 			webcamSocketAddress: this.options.webcamSocketAddress,
 			webcamSocketPort: this.options.webcamSocketPort,
+			staticsPath: this.options.staticsPath
 		});
 	}
 }

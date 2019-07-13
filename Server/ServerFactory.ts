@@ -35,8 +35,5 @@ export function createHttpsServer (): HttpsServer
 
 export function createHttpServerRedirectToHttps (): HttpServer
 {
-	return newHttpServer((req, res) => {
-		res.writeHead(301,{Location: `https://${req.headers.host}${req.url}`});
-		res.end();
-	});
+	return newHttpServer();
 }

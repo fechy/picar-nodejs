@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 import { ControlPanel, IControlPanelOptions, ControlPanelNoVideo, IControlPanelNoVideoOptions } from './ControlPanel';
 
 import { IGStreamServerOptions } from './Server';
@@ -43,7 +45,8 @@ function startControlPanelWithVideo(ip: string)
 		gamepadSocketAddress: ip,
 		gamepadSocketPort: 11000,
 		webcamSocketAddress: ip,
-		webcamSocketPort: 12000
+		webcamSocketPort: 12000,
+		staticsPath: path.join(__dirname),
 	};
 
 	const controlPanel = new ControlPanel(controlPanelOptions, gStreamServerOptions);

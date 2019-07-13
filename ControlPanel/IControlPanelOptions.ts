@@ -6,4 +6,5 @@ export interface IControlPanelOptions
 	gamepadSocketPort: number;
 	webcamSocketAddress: string;
 	webcamSocketPort: number;
+	staticsPath: string;
 }

@@ -1,7 +1,7 @@
 import * as Net from 'net';
 import * as SocketIO from 'socket.io';
 
-import { createHttpsServer } from "../Server";
+import { createHttpServer } from "../Server";
 
 const Dicer = require('dicer');
 
@@ -17,7 +17,7 @@ export class WebcamSocket {
 
 		socket.connect(gStreamTcpPort, gStreamTcpAddress, () => {
 			const io = SocketIO.listen(
-				createHttpsServer()
+				createHttpServer()
 					.listen(webcamSocketPort, webcamSocketAddress)
 			);
 

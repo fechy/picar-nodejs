@@ -1,15 +1,14 @@
-import { Server as HttpServer } from 'http';
 import { readFile } from 'fs';
 import * as Mustache from "mustache";
 import { join } from "path";
 import * as express from 'express'
 import * as proxy from 'express-http-proxy';
 
-const UNSECURE_PORT = 3000;
+const PORT = 3000;
 
-export class Http2ServerWrapper {
+export class HttpServerWrapper {
 
-	public serve (data: IHomepageTemplateVariables): HttpServer {
+	public serve (data: IHomepageTemplateVariables): express.Application {
 		const { staticsPath } = data;
 
 		const app = express();
@@ -27,8 +26,8 @@ export class Http2ServerWrapper {
 			res.sendFile(filePath);
 		});
 
-		app.listen(UNSECURE_PORT, () => {
-			console.log(`Ready on port ${UNSECURE_PORT}`);
+		app.listen(PORT, () => {
+			console.log(`Ready on port ${PORT}`);
 		});
 
 		return app;

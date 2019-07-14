@@ -1,6 +1,6 @@
 import { createGamepadSocket } from '../Gamepad';
 import { createCar } from '../Car';
-import { createHttp2ServerWrapper } from '../Server';
+import { createExpressServerWrapper } from '../Server';
 import { IControlPanelNoVideoOptions } from './IControlPanelNoVideoOptions';
 
 export class ControlPanelNoVideo
@@ -15,7 +15,7 @@ export class ControlPanelNoVideo
 	public startComponents () {
 
 		const car = createCar();
-		const webServer = createHttp2ServerWrapper();
+		const webServer = createExpressServerWrapper();
 		const gamepadSocket = createGamepadSocket();
 
 		car.on('car:ready', () => {

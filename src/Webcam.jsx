@@ -49,13 +49,6 @@ const Webcam = () => {
     });
   };
 
-  const detectFrame = (model) => {
-    if (model) {
-      model.detect(imageRef.current)
-        .then(renderPredictions);
-    }
-  };
-
   async function initializeModel(image) {
     const model = await cocoSsd.load('lite_mobilenet_v2');
 
@@ -73,15 +66,24 @@ const Webcam = () => {
       initializeModel(imageRef.current);
     }
 
-    return () => {
-      
-    }
+    return () => {}
   }, [imageRef]);
 
   return (
     <div>
-      <img ref={imageRef} className="fixed" width="640" height="480" src={`/stream`} alt="no signal" crossOrigin="anonymous" />
-      <canvas ref={canvasRef} className="fixed" width="640" height="480" />
+      <img ref={imageRef}
+        className="fixed"
+        width="640"
+        height="480"
+        src={`/stream`}
+        alt="no signal"
+        crossOrigin="anonymous"
+      />
+      <canvas ref={canvasRef}
+        className="fixed"
+        width="640"
+        height="480"
+      />
     </div>
   )
 }

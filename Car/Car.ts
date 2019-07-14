@@ -67,27 +67,27 @@ export class Car extends EventEmitter
 
 	public speedUp ()
 	{
-		this.speed = Math.min(this.speed + 1, 240);
+		this.speed = Math.min(this.speed + 5, 240);
 	}
 
 	public speedDown ()
 	{
 		if (this.speed > 40) {
-			this.speed = Math.max(this.speed - 1, 0);
+			this.speed = Math.max(this.speed - 5, 0);
 		}
 	}
 
 	public turnLeft ()
 	{
 		if (this.frontWheelServo) {
-			this.frontWheelServo.to(this.frontWheelServo.position - 1);
+			this.frontWheelServo.to(this.frontWheelServo.position - 5);
 		}
 	}
 
 	public turnRight ()
 	{
 		if (this.frontWheelServo) {
-			this.frontWheelServo.to(this.frontWheelServo.position + 1);
+			this.frontWheelServo.to(this.frontWheelServo.position + 5);
 		}
 	}
 
@@ -102,7 +102,7 @@ export class Car extends EventEmitter
 	{
 		if (this.panServo) {
 			if (this.panServo.position < this.panServo.range[1]) {
-				this.panServo.to(this.panServo.position + 1);
+				this.panServo.to(this.panServo.position + 5);
 			}
 		}
 	}
@@ -111,7 +111,7 @@ export class Car extends EventEmitter
 	{
 		if (this.panServo) {
 			if (this.panServo.position > this.panServo.range[0]) {
-				this.panServo.to(this.panServo.position - 1);
+				this.panServo.to(this.panServo.position - 5);
 			}
 		}
 	}

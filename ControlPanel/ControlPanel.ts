@@ -2,7 +2,7 @@ import { IControlPanelOptions } from './IControlPanelOptions';
 import { Car, createCar } from '../Car';
 import { createGamepadSocket } from '../Gamepad';
 import { createWebCamSocket } from '../Webcam';
-import { IGStreamServerOptions, createGStreamServer, createHttp2ServerWrapper } from '../Server';
+import { IGStreamServerOptions, createGStreamServer, createExpressServerWrapper } from '../Server';
 
 export class ControlPanel
 {
@@ -19,7 +19,7 @@ export class ControlPanel
 	{
 		const car: Car = createCar();
 
-		const webServer = createHttp2ServerWrapper();
+		const webServer = createExpressServerWrapper();
 		const gamepadSocket = createGamepadSocket();
 
 		// const gStreamCamProcess = gStreamServer.start(
